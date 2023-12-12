@@ -87,8 +87,7 @@ try:
                         # Nếu không thay đổi, bắt đầu lấy các phần tử con
                         break
 
-                # Lấy tất cả các phần tử con <p> và <li>
-                child_elements = response_element.find_elements(By.XPATH, ".//p")
+                child_elements = response_element.find_elements(By.XPATH, ".//p | .//pre")
 
                 # Tạo một danh sách để lưu trữ văn bản từ các phần tử con
                 response_texts = []
