@@ -24,6 +24,8 @@ driver = webdriver.Chrome(options=options)
 
 sent_once = False
 
+last_img_url = None
+
 try:
     # Mở trang web
     driver.get('https://flowgpt.com/p/darkimagegpt-v2')
@@ -153,13 +155,20 @@ try:
                         # Lấy đường link của ảnh
                         img_url = img_element.get_attribute("src")
 
-                        # Tải ảnh từ đường link
-                        img_data = requests.get(img_url).content
+                        # Kiểm tra xem URL ảnh có thay đổi không
+                        if img_url != last_img_url:
+                            # Nếu có thay đổi, tải ảnh từ đường link
+                            img_data = requests.get(img_url).content
 
-                        # Lưu ảnh vào file image.jpg
-                        with open("image.jpg", "wb") as f:
-                            f.write(img_data)
-                            print("Đã lưu ảnh thành công!")
+                            # Lưu ảnh vào file image.jpg
+                            with open("image.jpg", "wb") as f:
+                                f.write(img_data)
+                                print("Đã lưu ảnh thành công!")
+
+                            # Cập nhật URL ảnh cuối cùng
+                            last_img_url = img_url
+                        else:
+                            print("Ảnh không thay đổi.")
                     else:
                         print("Không tìm thấy ảnh.")
                 except Exception as e:
