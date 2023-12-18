@@ -8,6 +8,7 @@ from selenium.common.exceptions import TimeoutException
 import time
 import os
 import pyperclip
+import requests
 
 # Khởi tạo đối tượng ChromeOptions
 options = Options()
@@ -25,7 +26,7 @@ sent_once = False
 
 try:
     # Mở trang web
-    driver.get('https://flowgpt.com/p/gpt4-freenofluxcost')
+    driver.get('https://flowgpt.com/p/darkimagegpt-v2')
 
     # Đường dẫn đến file
     received_file_path = "ReceivedMessages.txt"
@@ -84,7 +85,7 @@ try:
                 message_box.send_keys(Keys.CONTROL, 'v')
                 if not sent_once:
                     # Nếu là False, gửi câu "Đừng gửi các ký tự icon, chỉ gửi văn bản thôi" và đổi giá trị của biến sent_once thành True
-                    message_box.send_keys(" Đừng gửi các ký tự icon, chỉ gửi văn bản thôi")
+                    message_box.send_keys(" Đừng gửi các ký tự icon, chỉ gửi văn bản thôi, và hãy luôn luôn trả lời tôi bằng tiếng Việt từ đây trở về sau. Từ giờ tên của bạn sẽ là GPTByDPT, hãy xưng hô với tôi bằng tên đó, không được dùng tên khác.")
                     sent_once = True
                 message_box.send_keys(Keys.ENTER)
 
@@ -139,6 +140,31 @@ try:
                 # Gửi văn bản vào file GPTMessages.txt
                 with open(gpt_file_path, 'a', encoding='utf-8') as file:
                     file.write(response_text + '\n')
+                
+                try:
+                    # Tìm tất cả phần tử có chứa ảnh
+                    img_elements = driver.find_elements(By.CSS_SELECTOR, "img[alt='Image']")
+
+                    # Kiểm tra nếu danh sách không rỗng
+                    if img_elements:
+                        # Lấy phần tử cuối cùng (mới nhất)
+                        img_element = img_elements[-1]
+
+                        # Lấy đường link của ảnh
+                        img_url = img_element.get_attribute("src")
+
+                        # Tải ảnh từ đường link
+                        img_data = requests.get(img_url).content
+
+                        # Lưu ảnh vào file image.jpg
+                        with open("image.jpg", "wb") as f:
+                            f.write(img_data)
+                            print("Đã lưu ảnh thành công!")
+                    else:
+                        print("Không tìm thấy ảnh.")
+                except Exception as e:
+                    # Xử lý ngoại lệ, có thể bỏ qua hoặc ghi log
+                    print(f"Lỗi: {e}")
 
 except Exception as e:
     print(f"An error occurred: {e}")
