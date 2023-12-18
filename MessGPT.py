@@ -124,6 +124,12 @@ try:
                         if (time.time() - start_time) > 300:  # 300 seconds = 5 minutes
                             driver.refresh()  # refresh the page
                             start_time = time.time()  # reset the timer
+                            
+                        # Xóa file 'image.jpg' sau khi đã gửi tin nhắn
+                        try:
+                            os.remove('image.jpg')
+                        except FileNotFoundError:
+                            print("Không tìm thấy file 'image.jpg' để xóa")
 
         except Exception as e:
             print(f"An error occurred: {e}")
