@@ -93,27 +93,38 @@ try:
                     
                     # Sao chép nội dung vào clipboard
                     pyperclip.copy(content2)
-
-                    # Gửi nội dung đã sao chép vào hộp thoại
-                    message_box.send_keys(Keys.CONTROL, 'v')
-
-                    # Nhấn phím Enter để gửi tin nhắn
-                    ActionChains(driver).send_keys(Keys.RETURN).perform()
-
-                    # Cập nhật tin nhắn cuối cùng đã gửi
-                    last_sent_message = content2
                     
-                    # Tìm và click vào nút
-                    button = driver.find_element(By.CSS_SELECTOR, "div[aria-label='Đóng đoạn chat'][role='button']")
-                    button.click()
+                    time.sleep(1)
                     
-                    if count % 3 == 0:
-                        # Nếu có, làm mới trang
-                        driver.refresh()
-                    
-                    if (time.time() - start_time) > 300:  # 300 seconds = 5 minutes
-                        driver.refresh()  # refresh the page
-                        start_time = time.time()  # reset the timer
+                    try:
+                        # Tìm đến trường nhập tệp
+                        attach_file_button = driver.find_element(By.CSS_SELECTOR, "input[type='file']")
+                        
+                        time.sleep(1)
+
+                        # Gửi đường dẫn tuyệt đối của tệp đến trường nhập tệp
+                        attach_file_button.send_keys(os.path.abspath('image.jpg'))
+                    except FileNotFoundError:
+                        print("Không tìm thấy image.jpg")
+                        # Continue with the rest of the program even if the file is not found
+                    finally:
+                        # Gửi nội dung đã sao chép vào hộp thoại
+                        message_box.send_keys(Keys.CONTROL, 'v')
+
+                        # Nhấn phím Enter để gửi tin nhắn
+                        ActionChains(driver).send_keys(Keys.RETURN).perform()
+
+                        # Cập nhật tin nhắn cuối cùng đã gửi
+                        last_sent_message = content2
+                        
+                        # Tìm và click vào nút
+                        button = driver.find_element(By.CSS_SELECTOR, "div[aria-label='Đóng đoạn chat'][role='button']")
+                        button.click()
+                        
+                        if (time.time() - start_time) > 300:  # 300 seconds = 5 minutes
+                            driver.refresh()  # refresh the page
+                            start_time = time.time()  # reset the timer
+
         except Exception as e:
             print(f"An error occurred: {e}")
             time.sleep(5)  # Chờ 5 giây trước khi thử lại
