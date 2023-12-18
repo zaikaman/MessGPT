@@ -143,7 +143,7 @@ try:
                 
                 try:
                     # Tìm tất cả phần tử có chứa ảnh
-                    img_elements = driver.find_elements(By.CSS_SELECTOR, "img[alt='Image']")
+                    img_elements = driver.find_elements(By.CSS_SELECTOR, "img[alt='Image'], img[alt='Hình ảnh']")
 
                     # Kiểm tra nếu danh sách không rỗng
                     if img_elements:
